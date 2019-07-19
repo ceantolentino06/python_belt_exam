@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Handy Helper Dashboard</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="container col-10">
+                <div class="message">
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% ifequal message.tags 'userflash info' %}
+                    <small class="text-success">{{ message }}</small>
+                    {% endifequal %}
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <h1>Hello {{user.first_name}}</h1>
+            </div>
+            <div class="container col-2 mt-3">
+                <a href="/logout">Logout</a>
+                <a href="/jobs/new" class="btn btn-primary ml-2">New job!</a>
+            </div>
+        </div>
+    </div>
+    <div class="container pt-4">
+        <div class="container">
+            <h4>Everyone's jobs:</h4>
+            <table class="table table-striped text-center">
+                <thead>
+                    <tr>
+                        <th scope="col">Job</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in jobs %}
+                    <tr>
+                        <td>{{ job.title }}</td>
+                        <td>{{ job.location }}</td>
+                        {% if user.id == job.created_by.id %}
+                        <td><a href="/jobs/view/{{ job.id }}">View</a> | <a href="/jobs/remove/{{ job.id }}">Remove</a>
+                            | <a href="/jobs/edit/{{ job.id }}">Edit</a> | <a href="/jobs/add/{{ job.id }}">Add</a></td>
+                        {% else %}
+                        <td><a href="/jobs/view/{{ job.id }}">View</a> | <a href="/jobs/add/{{ job.id }}">Add</a></td>
+                        {% endif %}
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="message">
+                {% if messages %}
+                {% for message in messages %}
+                {% ifequal message.tags 'jobcreate info' %}
+                <small class="text-info">{{ message }}</small>
+                {% endifequal %}
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="container mt-5">
+            <h4>{{user.first_name}}'s Jobs:</h4>
+            <table class="table table-striped text-center">
+                <thead>
+                    <tr>
+                        <th scope="col">Job</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for my_job in user.my_jobs.all %}
+                    <tr>
+                        <td>{{my_job.title}}</td>
+                        <td><a href="/jobs/view/{{ my_job.id }}">View</a> | <a
+                                href="/jobs/remove/{{ my_job.id }}">Done</a> | <a
+                                href="/jobs/give_up/{{ my_job.id }}">Give Up</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="message">
+                {% if messages %}
+                {% for message in messages %}
+                {% ifequal message.tags 'jobadd info' %}
+                <small class="text-info">{{ message }}</small>
+                {% endifequal %}
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

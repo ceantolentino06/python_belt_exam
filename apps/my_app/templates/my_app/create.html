@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% load static %}
+    <script src="{% static 'my_app/js/script.js' %}"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <title>New Job</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="container col-10">
+                <h1>Hello {{ request.session.fname }}! Create a job!</h1>
+            </div>
+            <div class="container col-2 mt-3">
+                <a href="/logout" class="float-right">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="container pt-4">
+        <div class="container">
+            <form action="/jobs/new/add_job" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <div class="message">
+                        {% if messages %}
+                        {% for message in messages %}
+                        {% ifequal message.tags 'title error' %}
+                        <small class="text-danger">{{ message }}</small>
+                        {% endifequal %}
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    <input type="text" class="form-control col-4" name="title" id="title" required>
+                </div>
+                <div class="form-group">
+                    <div class="message">
+                        {% if messages %}
+                        {% for message in messages %}
+                        {% ifequal message.tags 'desc error' %}
+                        <small class="text-danger">{{ message }}</small>
+                        {% endifequal %}
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    <label for="desc">Description:</label>
+                    <textarea name="desc" class="form-control col-4" id="desc" cols="30" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="location">Location:</label>
+                    <div class="message">
+                        {% if messages %}
+                        {% for message in messages %}
+                        {% ifequal message.tags 'location error' %}
+                        <small class="text-danger">{{ message }}</small>
+                        {% endifequal %}
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    <input type="text" class="form-control col-4 mb-3" name="location" id="location" required>
+                    <p>Categories:</p>
+                    <div class="message">
+                        {% if messages %}
+                        {% for message in messages %}
+                        {% ifequal message.tags 'jobcat error' %}
+                        <small class="text-danger">{{ message }}</small>
+                        {% endifequal %}
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" name="cat" type="checkbox" value="Pet Care" id="defaultCheck1">
+                    <label class="form-check-label" for="defaultCheck1">
+                        Pet Care
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" name="cat" type="checkbox" value="Electrical" id="defaultCheck1">
+                    <label class="form-check-label" for="defaultCheck1">
+                        Electrical
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" name="cat" type="checkbox" value="Garden" id="defaultCheck1">
+                    <label class="form-check-label" for="defaultCheck1">
+                        Garden
+                    </label>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" id="myCheck" aria-label="Checkbox for following text input">
+                        </div>
+                    </div>
+                    <input type="text" id="myText" name="cat" class="form-control col-2" aria-label="Text input with checkbox"
+                        placeholder="Other">
+                </div>
+                <input type="hidden" name="userID" value="{{ request.session.id }}">
+                <a href="/success" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary" id="button">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
